@@ -1,0 +1,30 @@
+﻿<h3>VoronoiDiagram</h3>
+
+@page "/voronoi-diagram"
+@using Landmass_Generator.Voronoi_Diagram
+
+<!--
+<svg width="800" height="800" style="border: 1px solid black;">
+    @foreach (var edge in Edges)
+    {
+        <line x1="@edge.Start.X" y1="@edge.Start.Y" x2="@edge.End.X" y2="@edge.End.Y"
+          stroke="black" stroke-width="1" />
+        <text>@($"Edge from ({edge.Start.X}, {edge.Start.Y}) to ({edge.End?.X}, {edge.End?.Y})")</text>
+        <line x1="@edge.Start.X" y1="@edge.Start.Y" x2="@edge.End?.X ?? edge.Start.X" y2="@edge.End?.Y ?? edge.Start.Y" stroke="black" />
+    }
+</svg>
+-->
+
+<svg width="500" height="500" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+    @foreach (var edge in Edges)
+    {
+        <line x1="@edge.Start.X" y1="@edge.Start.Y" x2="@edge.End?.X ?? edge.Start.X" y2="@edge.End?.Y ?? edge.Start.Y" stroke="black" />
+    }
+</svg>
+
+@code {
+    [Parameter]
+    public List<Edge> Edges { get; set; } = new List<Edge>();
+
+}
+

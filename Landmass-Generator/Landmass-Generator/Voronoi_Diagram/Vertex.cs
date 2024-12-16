@@ -7,7 +7,7 @@ using System.Numerics;
 
 namespace Landmass_Generator.Voronoi_Diagram
 {
-    internal class Vertex
+    public class Vertex
     {
         public double X { get; set; }
         public double Y { get; set; }

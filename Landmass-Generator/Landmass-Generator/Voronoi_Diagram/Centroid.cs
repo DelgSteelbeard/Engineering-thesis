@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Landmass_Generator.Voronoi_Diagram
 {
-    internal class Centroid
+    public class Centroid
     {
         public double X { get; set; }
         public double Y { get; set; }
@@ -21,5 +21,19 @@ namespace Landmass_Generator.Voronoi_Diagram
             X = x;
             Y = y;
         }
+
+        private List<Centroid> GenerateRandomCentroids(int count, double width, double height)
+        {
+            Random rand = new Random();
+            var centroids = new List<Centroid>();
+
+            for (int i = 0; i < count; i++)
+            {
+                centroids.Add(new Centroid((rand.NextDouble() * width), (rand.NextDouble() * height)));
+            }
+
+            return centroids;
+        }
+
     }
 }

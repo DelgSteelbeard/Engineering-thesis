@@ -6,20 +6,19 @@ using System.Threading.Tasks;
 
 namespace Landmass_Generator.Voronoi_Diagram
 {
-    internal class Edge
+    public class Edge
     {
         public Vertex Start { get; set; }
         public Vertex End { get; set; }
+        public Centroid LeftSite { get; set; }
+        public Centroid RightSite { get; set; }
 
-        /// <summary>
-        /// creates a edge with start and end points
-        /// </summary>
-        /// <param name="start">start point</param>
-        /// <param name="end">end point</param>
-        public Edge(Vertex start, Vertex end)
+        public Edge(Vertex start, Vertex end, Centroid leftSite, Centroid rightSite)
         {
             Start = start;
             End = end;
+            LeftSite = leftSite;
+            RightSite = rightSite;
         }
     }
 }
