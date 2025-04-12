@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "MUUwcFlxMNw=",
+  "dgSpecHash": "aPWmY6ZGNzk=",
   "success": true,
-  "projectFilePath": "C:\\Users\\andre\\Desktop\\Engineering-thesis\\Engineeringthesis.csproj",
+  "projectFilePath": "C:\\Users\\andre\\Desktop\\Engineering-thesis\\DelgSteelbeard\\Engineering-thesis\\Engineering-thesis\\Engineeringthesis.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\andre\\.nuget\\packages\\sharpvoronoilib\\1.0.4\\sharpvoronoilib.1.0.4.nupkg.sha512"
   ],

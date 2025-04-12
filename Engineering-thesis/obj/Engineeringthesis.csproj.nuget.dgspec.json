@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\andre\\Desktop\\Engineering-thesis\\Engineeringthesis.csproj": {}
+    "C:\\Users\\andre\\Desktop\\Engineering-thesis\\DelgSteelbeard\\Engineering-thesis\\Engineering-thesis\\Engineeringthesis.csproj": {}
   },
   "projects": {
-    "C:\\Users\\andre\\Desktop\\Engineering-thesis\\Engineeringthesis.csproj": {
+    "C:\\Users\\andre\\Desktop\\Engineering-thesis\\DelgSteelbeard\\Engineering-thesis\\Engineering-thesis\\Engineeringthesis.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\andre\\Desktop\\Engineering-thesis\\Engineeringthesis.csproj",
+        "projectUniqueName": "C:\\Users\\andre\\Desktop\\Engineering-thesis\\DelgSteelbeard\\Engineering-thesis\\Engineering-thesis\\Engineeringthesis.csproj",
         "projectName": "Engineeringthesis",
-        "projectPath": "C:\\Users\\andre\\Desktop\\Engineering-thesis\\Engineeringthesis.csproj",
+        "projectPath": "C:\\Users\\andre\\Desktop\\Engineering-thesis\\DelgSteelbeard\\Engineering-thesis\\Engineering-thesis\\Engineeringthesis.csproj",
         "packagesPath": "C:\\Users\\andre\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\andre\\Desktop\\Engineering-thesis\\obj\\",
+        "outputPath": "C:\\Users\\andre\\Desktop\\Engineering-thesis\\DelgSteelbeard\\Engineering-thesis\\Engineering-thesis\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Users\\andre\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder",
