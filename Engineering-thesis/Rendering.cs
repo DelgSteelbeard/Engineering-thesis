@@ -44,8 +44,8 @@ namespace Engineeringthesis
         /// <param name="strength">strength of the relaxation</param>
         public static List<VoronoiEdge> RelaxedEdgesOfVoronoiDiagram(VoronoiPlane plane,int iteration = 1,float strength = 1f)
         {
-           List<VoronoiEdge> relaxedEdges = plane.Relax(iteration, strength);
-           return relaxedEdges;
+           List<VoronoiEdge> relaxed_edges = plane.Relax(iteration, strength);
+           return relaxed_edges;
         }
 
         /// <summary>
@@ -53,16 +53,33 @@ namespace Engineeringthesis
         /// </summary>
         /// <param name="diagram"></param>
         /// <param name="centroid"></param>
-        public static void ColorACell(Canvas diagram, VoronoiSite centroid)
+        public static void ColorACell(Canvas diagram, VoronoiSite centroid, Color color = default(Color))
         {
             List<VoronoiPoint> points = centroid.ClockwisePoints.ToList();
             
+            if (color == default(Color))
+            {
+                color = Colors.Blue;
+            }          
+
+            SolidColorBrush cell_color = new SolidColorBrush(color);
+
             Polygon voronoi_cell = new Polygon
             {
                 Points = new PointCollection(points.Select(p => new Point(p.X, p.Y))),
-                Fill = Brushes.Blue
+                Fill = cell_color
             };
             diagram.Children.Add(voronoi_cell);
+        }
+
+        /// <summary>
+        /// Converts a Color of type "Color" to a "Brush".
+        /// </summary>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        public static SolidColorBrush ColorToBrush(Color color)
+        {
+            return new SolidColorBrush(color);
         }
     }
 }

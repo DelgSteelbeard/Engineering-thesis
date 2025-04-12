@@ -73,5 +73,17 @@ namespace Engineeringthesis
             plane.Tessellate();
             return plane;
         }
+
+        /// <summary>
+        /// Calculates and returns the center of the provided canvas.
+        /// </summary>
+        /// <param name="canvas"></param>
+        /// <returns></returns>
+        public static Point GetCanvasCenter(Canvas canvas)
+        {
+            double centerX = canvas.ActualWidth / 2;
+            double centerY = canvas.ActualHeight / 2;
+            return new Point(centerX, centerY);
+        }
     }
 }

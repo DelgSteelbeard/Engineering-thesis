@@ -41,7 +41,7 @@ public partial class MainWindow : Window
         Rendering.DrawVoronoiDiagram(Diagram, list_of_edge);
 
 
-        List<VoronoiSite> border_cells = GeometryData.GetBorderCells(list_of_edge);    
+        List<VoronoiSite> border_cells = GeometryData.GetBorderCells(list_of_edge);
 
         foreach (VoronoiSite cell in border_cells)
         {
