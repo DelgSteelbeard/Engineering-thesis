@@ -21,6 +21,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        LandTresholdBox.Text = LandTreshold.Value.ToString();
     }
     private void GeneratePoints_Click(object sender, RoutedEventArgs e)
     {
@@ -33,19 +34,21 @@ public partial class MainWindow : Window
         }
         list_of_centroid.Clear();
         GeometryData.GeneratePoints(count, list_of_centroid, Diagram);
-        List<VoronoiEdge> list_of_edge = VoronoiPlane.TessellateOnce(list_of_centroid, 0,0,Diagram.ActualWidth, Diagram.ActualHeight);
+        List<VoronoiEdge> list_of_edge = VoronoiPlane.TessellateOnce(list_of_centroid, 0, 0, Diagram.ActualWidth, Diagram.ActualHeight);
         VoronoiPlane plane = GeometryData.GenerateVoronoiPlane(list_of_centroid, Diagram);
 
-        list_of_edge = Rendering.RelaxedEdgesOfVoronoiDiagram(plane,5);
+        list_of_edge = Rendering.RelaxedEdgesOfVoronoiDiagram(plane, 5);
 
         Rendering.DrawVoronoiDiagram(Diagram, list_of_edge);
 
+        MapData map = new MapData();
+        map.list_of_centroid = list_of_centroid;
+        MapLogic.ClassifyVoronoiCells(map, list_of_edge, Diagram, LandTreshold.Value);
 
-        List<VoronoiSite> border_cells = GeometryData.GetBorderCells(list_of_edge);
-
-        foreach (VoronoiSite cell in border_cells)
-        {
-            Rendering.ColorACell(Diagram, cell);
-        }
+        map.ColorMap(Diagram);
+    }
+    private void LandTreshold_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        LandTresholdBox.Text = LandTreshold.Value.ToString();
     }
 }

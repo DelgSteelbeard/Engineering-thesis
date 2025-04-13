@@ -37,6 +37,11 @@ namespace Engineeringthesis
             }         
         }
 
+        public static void ClassifyVoronoiCells(MapData map, List<VoronoiEdge> edges, Canvas canvas, double treshold = 0.5)
+        {
+            ClassifyVoronoiCells(map.list_of_centroid, edges, map.water_cells, map.land_cells, canvas, treshold);
+        }
+
         public static bool IsLand(VoronoiSite centroid, Canvas canvas, double treshold)
         {
             Point center = GeometryData.GetCanvasCenter(canvas);

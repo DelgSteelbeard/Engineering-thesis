@@ -9,7 +9,9 @@
     <Grid>
         <Canvas x:Name="Diagram" Background="LightGray" Margin="10"/>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-            <TextBox Name="PointCountBox" Width="100" Text="100" Margin="0,0,10,0"/>
+            <TextBox Name="PointCountBox" Width="100" Text="1500" Margin="0,0,10,0"/>
+            <Slider Name="LandTreshold" Minimum = "0" Maximum = "1" ValueChanged = "LandTreshold_ValueChanged" Width="200" Margin="0,0,10,0"/>
+            <TextBox Name="LandTresholdBox" Width="100" Text="0.5" Margin="0,0,10,0"/>
             <Button Content="Generuj punkty" Click="GeneratePoints_Click"/>
         </StackPanel>
     </Grid>
