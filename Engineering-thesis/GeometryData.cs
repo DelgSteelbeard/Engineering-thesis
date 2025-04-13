@@ -81,9 +81,21 @@ namespace Engineeringthesis
         /// <returns></returns>
         public static Point GetCanvasCenter(Canvas canvas)
         {
-            double centerX = canvas.ActualWidth / 2;
-            double centerY = canvas.ActualHeight / 2;
-            return new Point(centerX, centerY);
+            double center_X = canvas.ActualWidth / 2;
+            double center_Y = canvas.ActualHeight / 2;
+            return new Point(center_X, center_Y);
+        }
+
+        public static Point SiteToPointDifferance(VoronoiSite centroid, Point center)
+        {
+            double x = centroid.X - center.X;
+            double y = centroid.Y - center.Y;
+            return new Point(x, y);
+        }
+
+        public static double CalculateDistance(double dx, double dy)
+        {
+            return Math.Sqrt(dx * dx + dy * dy);
         }
     }
 }

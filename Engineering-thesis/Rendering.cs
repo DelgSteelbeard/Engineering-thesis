@@ -49,10 +49,11 @@ namespace Engineeringthesis
         }
 
         /// <summary>
-        /// Colors a Voronoi cell on the provided canvas using the centroid of the cell.
+        /// Colors a Voronoi cell on the provided canvas using the specified centroid and color.
         /// </summary>
         /// <param name="diagram"></param>
-        /// <param name="centroid"></param>
+        /// <param name="centroid">centroid of the polygon to color</param>
+        /// <param name="color"></param>
         public static void ColorACell(Canvas diagram, VoronoiSite centroid, Color color = default(Color))
         {
             List<VoronoiPoint> points = centroid.ClockwisePoints.ToList();
