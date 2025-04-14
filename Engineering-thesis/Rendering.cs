@@ -54,20 +54,20 @@ namespace Engineeringthesis
         /// <param name="diagram"></param>
         /// <param name="centroid">centroid of the polygon to color</param>
         /// <param name="color"></param>
-        public static void ColorACell(Canvas diagram, VoronoiSite centroid, Color color = default(Color))
+        public static void ColorACell(Canvas diagram, VoronoiSite centroid, Color color = default)
         {
             List<VoronoiPoint> points = centroid.ClockwisePoints.ToList();
             
-            if (color == default(Color))
+            if (color == default)
             {
                 color = Colors.Blue;
             }          
 
-            SolidColorBrush cell_color = new SolidColorBrush(color);
+            SolidColorBrush cell_color = new(color);
 
             Polygon voronoi_cell = new Polygon
             {
-                Points = new PointCollection(points.Select(p => new Point(p.X, p.Y))),
+                Points = [.. points.Select(p => new Point(p.X, p.Y))],
                 Fill = cell_color
             };
             diagram.Children.Add(voronoi_cell);

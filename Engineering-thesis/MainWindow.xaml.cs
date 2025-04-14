@@ -17,7 +17,7 @@ namespace Engineeringthesis;
 /// </summary>
 public partial class MainWindow : Window
 {
-    public void InitializeSliderValue(TextBox text_box, Slider slider)
+    public static void InitializeSliderValue(TextBox text_box, Slider slider)
     {
         if (text_box != null && slider != null)
         {
@@ -37,7 +37,7 @@ public partial class MainWindow : Window
         generation_values.OffsetFactor = OffsetFactor.Value;
     }
 
-    List<VoronoiSite> list_of_centroid = new();  
+    List<VoronoiSite> list_of_centroid = [];  
     
     public MainWindow()
     {
@@ -63,16 +63,17 @@ public partial class MainWindow : Window
         }
         list_of_centroid.Clear();
         GeometryData.GeneratePoints(count, list_of_centroid, Diagram);
-        List<VoronoiEdge> list_of_edge = VoronoiPlane.TessellateOnce(list_of_centroid, 0, 0, Diagram.ActualWidth, Diagram.ActualHeight);
+        //List<VoronoiEdge> list_of_edge = VoronoiPlane.TessellateOnce(list_of_centroid, 0, 0, Diagram.ActualWidth, Diagram.ActualHeight);
         VoronoiPlane plane = GeometryData.GenerateVoronoiPlane(list_of_centroid, Diagram);
 
-        list_of_edge = Rendering.RelaxedEdgesOfVoronoiDiagram(plane, 5);
+        List <VoronoiEdge> list_of_edge = Rendering.RelaxedEdgesOfVoronoiDiagram(plane, 5);
 
         Rendering.DrawVoronoiDiagram(Diagram, list_of_edge);
 
-        MapData map = new MapData(generation_values);
-        map.list_of_centroid = list_of_centroid;
+        MapData map = new(generation_values);
+        map.CentroidList = list_of_centroid;
         MapLogic.ClassifyVoronoiCells(map, list_of_edge, Diagram);
+        MapLogic.SeparateOceansAndLakes(map, list_of_edge);
 
         map.ColorMap(Diagram);
     }
@@ -94,7 +95,6 @@ public partial class MainWindow : Window
     }
     private void Octaves_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
     {
-        string message = Octaves.Value.ToString();
         try
         {
             if (OctavesBox != null)

@@ -9,38 +9,39 @@ using System.Windows.Controls;
 
 namespace Engineeringthesis
 {
-    public class MapData
+    public class MapData(MapGenerationDataSet generation_values)
     {
-        public List<VoronoiSite> list_of_centroid { get; set; }
-        public List<VoronoiSite> land_cells { get; set; }
-        public List<VoronoiSite> water_cells { get; set; }
-        public MapGenerationDataSet generation_values { get; set; }
+        public List<VoronoiSite> CentroidList { get; set; } = [];
+        public List<VoronoiSite> LandCells { get; set; } = [];
+        public List<VoronoiSite> WaterCells { get; set; } = [];
+        public List<VoronoiSite> InLandWaterCells { get; set; } = [];
+        public MapGenerationDataSet GenerationValues { get; set; } = generation_values;
 
-        public MapData(MapGenerationDataSet generation_values)
+        public void ColorMap(Canvas diagram, Color land_color = default, Color water_color = default, Color inland_water_color = default)
         {
-            list_of_centroid = new List<VoronoiSite>();
-            land_cells = new List<VoronoiSite>();
-            water_cells = new List<VoronoiSite>();
-            this.generation_values = generation_values;
-        }
-
-        public void ColorMap(Canvas diagram, Color landColor = default(Color), Color waterColor = default(Color))
-        {
-            if (landColor == default(Color))
+            if (land_color == default)
             {
-                landColor = Colors.Brown;
+                land_color = Colors.Brown;
             }
-            if (waterColor == default(Color))
+            if (water_color == default)
             {
-                waterColor = Colors.Blue;
+                water_color = Colors.Blue;
             }
-            foreach (var cell in land_cells)
+            if (inland_water_color == default)
             {
-                Rendering.ColorACell(diagram, cell, landColor);
+                inland_water_color = Colors.LightBlue;
             }
-            foreach (var cell in water_cells)
+            foreach (var cell in LandCells)
             {
-                Rendering.ColorACell(diagram, cell, waterColor);
+                Rendering.ColorACell(diagram, cell, land_color);
+            }
+            foreach (var cell in WaterCells)
+            {
+                Rendering.ColorACell(diagram, cell, water_color);
+            }
+            foreach (var cell in InLandWaterCells)
+            {
+                Rendering.ColorACell(diagram, cell, inland_water_color);
             }
         }
     }

@@ -23,16 +23,16 @@ namespace Engineeringthesis
         public static void ClassifyVoronoiCells(MapData map, List<VoronoiEdge> edges, Canvas canvas)
         {
             //border are allways water cells
-            map.water_cells = GeometryData.GetBorderCells(edges);
-            foreach (var cell in map.list_of_centroid)
+            map.WaterCells = GeometryData.GetBorderCells(edges);
+            foreach (var cell in map.CentroidList)
             {
                 if (IsLand(cell, map, canvas))
                 {
-                    map.land_cells.Add(cell);
+                    map.LandCells.Add(cell);
                 }
                 else
                 {
-                    map.water_cells.Add(cell);
+                    map.WaterCells.Add(cell);
                 }
             }
         }
@@ -49,9 +49,9 @@ namespace Engineeringthesis
             Point center = GeometryData.GetCanvasCenter(canvas);
 
             // Apply random offset to the center for more variation  
-            Random random = new Random(canvas.GetHashCode()); // Seed based on canvas for consistency  
-            double offsetX = map.generation_values.OffsetFactor * (random.NextDouble() - 0.5) * canvas.ActualWidth;
-            double offsetY = map.generation_values.OffsetFactor * (random.NextDouble() - 0.5) * canvas.ActualHeight;
+            Random random = new(canvas.GetHashCode()); // Seed based on canvas for consistency  
+            double offsetX = map.GenerationValues.OffsetFactor * (random.NextDouble() - 0.5) * canvas.ActualWidth;
+            double offsetY = map.GenerationValues.OffsetFactor * (random.NextDouble() - 0.5) * canvas.ActualHeight;
             center.Offset(offsetX, offsetY);
 
             double dx = GeometryData.SiteToPointDifferance(centroid, center).X;
@@ -71,8 +71,10 @@ namespace Engineeringthesis
 
             double value = r + noise;
 
-            return value < map.generation_values.LandTreshold;
+            return value < map.GenerationValues.LandTreshold;
         }
+
+
 
         /// <summary>
         /// Generates ridged noise based on the angle and radius from the center of the canvas.
@@ -84,12 +86,12 @@ namespace Engineeringthesis
         /// <returns></returns>
         private static double GenerateRidgedNoise(double angle, double radius, Random random, MapData map)
         {
-            double double_octaves = Math.Round(map.generation_values.Octaves);
+            double double_octaves = Math.Round(map.GenerationValues.Octaves);
             int octaves = (int)double_octaves;
             // Generate Perlin-like noise with ridges
             double noiseValue = 0.0;
-            double frequency = map.generation_values.BaseFrequency;
-            double currentAmplitude = map.generation_values.Amplitude;
+            double frequency = map.GenerationValues.BaseFrequency;
+            double currentAmplitude = map.GenerationValues.Amplitude;
 
             for (int i = 0; i < octaves; i++) // Octaves for multi-frequency noise
             {
@@ -102,7 +104,64 @@ namespace Engineeringthesis
                 currentAmplitude *= 0.5; // Decrease amplitude
             }
 
-            return noiseValue - map.generation_values.Amplitude; // Normalize to center around 0
+            return noiseValue - map.GenerationValues.Amplitude; // Normalize to center around 0
+        }
+
+        /// <summary>
+        /// Identifies water areas connected to the edges of the map (oceans) and separates them from lakes.
+        /// </summary>
+        /// <param name="map">The map data containing land and water cells.</param>
+        /// <param name="edges">The list of Voronoi edges defining the diagram.</param>
+        public static void SeparateOceansAndLakes(MapData map, List<VoronoiEdge> edges)
+        {
+            var visited = new HashSet<VoronoiSite>();
+            var oceanCells = new HashSet<VoronoiSite>();
+
+            // Start flood fill from water cells on the border of the map
+            foreach (var borderCell in GeometryData.GetBorderCells(edges))
+            {
+                if (map.WaterCells.Contains(borderCell) && !visited.Contains(borderCell))
+                {
+                    FloodFill(borderCell, map, visited, oceanCells);
+                }
+            }
+
+            // All water cells not in oceanCells are lakes
+            map.InLandWaterCells = map.WaterCells.Except(oceanCells).ToList();
+        }
+
+        /// <summary>
+        /// Performs flood fill to identify connected water cells.
+        /// </summary>
+        /// <param name="start">The starting water cell.</param>
+        /// <param name="map">The map data containing land and water cells.</param>
+        /// <param name="visited">The set of already visited cells.</param>
+        /// <param name="oceanCells">The set of water cells connected to the border (oceans).</param>
+        private static void FloodFill(VoronoiSite start, MapData map, HashSet<VoronoiSite> visited, HashSet<VoronoiSite> oceanCells)
+        {
+            var queue = new Queue<VoronoiSite>();
+            queue.Enqueue(start);
+
+            while (queue.Count > 0)
+            {
+                var current = queue.Dequeue();
+
+                if (visited.Contains(current))
+                    continue;
+
+                visited.Add(current);
+                oceanCells.Add(current);
+
+                var neighbors = current.Neighbours.ToList();
+
+                foreach (var neighbor in neighbors)
+                {
+                    if (map.WaterCells.Contains(neighbor) && !visited.Contains(neighbor))
+                    {
+                        queue.Enqueue(neighbor);
+                    }
+                }
+            }
         }
     }
 }

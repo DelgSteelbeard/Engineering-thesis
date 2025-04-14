@@ -20,14 +20,14 @@ namespace Engineeringthesis
         /// <param name="diagram">the canvas for which the points will be generated</param>
         public static void GeneratePoints(int count, List<VoronoiSite> list_of_centroid, Canvas diagram)
         {
-            Random random = new Random();
+            Random random = new();
             double canvas_height = diagram.ActualHeight;
             double canvas_width = diagram.ActualWidth;
             for (int i = 0; i < count; i++)
             {
                 double x = random.NextDouble() * (canvas_width - 5);
                 double y = random.NextDouble() * (canvas_height - 5);
-                VoronoiSite centroid = new VoronoiSite(x, y);
+                VoronoiSite centroid = new(x, y);
                 list_of_centroid.Add(centroid);
             }
         }
@@ -39,7 +39,7 @@ namespace Engineeringthesis
         /// <returns></returns>
         public static List<VoronoiSite> GetBorderCells(List<VoronoiEdge> edges)
         {
-            List<VoronoiSite> border_cells = new List<VoronoiSite>();
+            List<VoronoiSite> border_cells = [];
             foreach (VoronoiEdge edge in edges)
             {
                 // if only Right site of edge exists it is a border edge
@@ -68,7 +68,7 @@ namespace Engineeringthesis
         /// <returns></returns>
         public static VoronoiPlane GenerateVoronoiPlane(List<VoronoiSite> list_of_centroid, Canvas diagram)
         {
-            VoronoiPlane plane = new VoronoiPlane(0, 0, diagram.ActualWidth, diagram.ActualHeight);
+            VoronoiPlane plane = new(0, 0, diagram.ActualWidth, diagram.ActualHeight);
             plane.SetSites(list_of_centroid);
             plane.Tessellate();
             return plane;
