@@ -20,36 +20,38 @@ namespace Engineeringthesis
         /// <param name="land_cells">list of sitest that land cell will be added to</param>
         /// <param name="canvas">the canvas where diagram is located (uses the dimentions)</param>
         /// <param name="treshold">threshlod of when a watercell becoms a land cell</param>
-        public static void ClassifyVoronoiCells(List<VoronoiSite> cells, List<VoronoiEdge> edges, List<VoronoiSite> water_cells, List<VoronoiSite> land_cells, Canvas canvas, double treshold = 0.5)
+        public static void ClassifyVoronoiCells(MapData map, List<VoronoiEdge> edges, Canvas canvas)
         {
             //border are allways water cells
-            water_cells = GeometryData.GetBorderCells(edges);
-            foreach (var cell in cells)
+            map.water_cells = GeometryData.GetBorderCells(edges);
+            foreach (var cell in map.list_of_centroid)
             {
-                if(IsLand(cell, canvas, treshold))
+                if (IsLand(cell, map, canvas))
                 {
-                    land_cells.Add(cell);
+                    map.land_cells.Add(cell);
                 }
                 else
                 {
-                    water_cells.Add(cell);
+                    map.water_cells.Add(cell);
                 }
-            }         
+            }
         }
 
-        public static void ClassifyVoronoiCells(MapData map, List<VoronoiEdge> edges, Canvas canvas, double treshold = 0.5)
-        {
-            ClassifyVoronoiCells(map.list_of_centroid, edges, map.water_cells, map.land_cells, canvas, treshold);
-        }
-
-        public static bool IsLand(VoronoiSite centroid, Canvas canvas, double treshold, double offsetFactor = 0.1)
+        /// <summary>
+        /// Determines if a Voronoi cell is classified as land or water based on its distance from the center of the canvas and noise generation.
+        /// </summary>
+        /// <param name="centroid">Central point from which the distance that determines if a cell is land is calculated</param>
+        /// <param name="map"></param>
+        /// <param name="canvas"></param>
+        /// <returns></returns>
+        public static bool IsLand(VoronoiSite centroid, MapData map, Canvas canvas)
         {
             Point center = GeometryData.GetCanvasCenter(canvas);
 
             // Apply random offset to the center for more variation  
             Random random = new Random(canvas.GetHashCode()); // Seed based on canvas for consistency  
-            double offsetX = offsetFactor * (random.NextDouble() - 0.5) * canvas.ActualWidth;
-            double offsetY = offsetFactor * (random.NextDouble() - 0.5) * canvas.ActualHeight;
+            double offsetX = map.generation_values.OffsetFactor * (random.NextDouble() - 0.5) * canvas.ActualWidth;
+            double offsetY = map.generation_values.OffsetFactor * (random.NextDouble() - 0.5) * canvas.ActualHeight;
             center.Offset(offsetX, offsetY);
 
             double dx = GeometryData.SiteToPointDifferance(centroid, center).X;
@@ -65,24 +67,31 @@ namespace Engineeringthesis
 
             // Introduce Ridged noise for more natural shapes  
             random = new Random(centroid.GetHashCode()); // Seed based on centroid for consistency  
-            double noise = GenerateRidgedNoise(angle, r, random);
+            double noise = GenerateRidgedNoise(angle, r, random, map);
 
             double value = r + noise;
 
-            return value < treshold;
+            return value < map.generation_values.LandTreshold;
         }
 
-        private static double GenerateRidgedNoise(double angle, double radius, Random random)
+        /// <summary>
+        /// Generates ridged noise based on the angle and radius from the center of the canvas.
+        /// </summary>
+        /// <param name="angle"></param>
+        /// <param name="radius"></param>
+        /// <param name="random"></param>
+        /// <param name="map"></param>
+        /// <returns></returns>
+        private static double GenerateRidgedNoise(double angle, double radius, Random random, MapData map)
         {
+            double double_octaves = Math.Round(map.generation_values.Octaves);
+            int octaves = (int)double_octaves;
             // Generate Perlin-like noise with ridges
-            double baseFrequency = 4.0;
-            double amplitude = 0.2;
-
             double noiseValue = 0.0;
-            double frequency = baseFrequency;
-            double currentAmplitude = amplitude;
+            double frequency = map.generation_values.BaseFrequency;
+            double currentAmplitude = map.generation_values.Amplitude;
 
-            for (int i = 0; i < 4; i++) // Octaves for multi-frequency noise
+            for (int i = 0; i < octaves; i++) // Octaves for multi-frequency noise
             {
                 double rawNoise = Math.Sin(frequency * angle + random.NextDouble() * 2 * Math.PI) *
                                   Math.Sin(frequency * radius + random.NextDouble() * 2 * Math.PI);
@@ -93,7 +102,7 @@ namespace Engineeringthesis
                 currentAmplitude *= 0.5; // Decrease amplitude
             }
 
-            return noiseValue - amplitude; // Normalize to center around 0
+            return noiseValue - map.generation_values.Amplitude; // Normalize to center around 0
         }
     }
 }

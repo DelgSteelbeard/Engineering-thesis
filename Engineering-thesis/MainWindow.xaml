@@ -16,12 +16,15 @@
             <Label Content="Amplitude:"/>
             <Slider Name="Amplitude" Minimum = "0" Maximum = "1" ValueChanged = "Amplitude_ValueChanged" Width="125" Margin="0,0,10,0"/>
             <TextBox Name="AmplitudeBox" Width="100" Text="0,2" Margin="0,0,10,0"/>
-            <Label Content="BaseFrequency:"/>
+            <Label Content="Base Frequency:"/>
             <Slider Name="BaseFrequency" Minimum = "0" Maximum = "10" ValueChanged = "BaseFrequency_ValueChanged" Width="125" Margin="0,0,10,0"/>
             <TextBox Name="BaseFrequencyBox" Width="100" Text="4,0" Margin="0,0,10,0"/>
             <Label Content="Octaves:"/>
             <Slider Name="Octaves" Minimum = "1" Maximum = "10" TickFrequency="1" IsSnapToTickEnabled="True"  ValueChanged = "Octaves_ValueChanged" Width="125" Margin="0,0,10,0"/>
             <TextBox Name="OctavesBox" Width="100" Text="5" Margin="0,0,10,0"/>
+            <Label Content="Offset Factor:"/>
+            <Slider Name="OffsetFactor" Minimum = "0" Maximum = "1"  ValueChanged = "OffsetFactor_ValueChanged" Width="125" Margin="0,0,10,0"/>
+            <TextBox Name="OffsetFactorBox" Width="100" Text="0,1" Margin="0,0,10,0"/>
             <Button Content="Generate Map" Click="GeneratePoints_Click"/>
         </StackPanel>
     </Grid>

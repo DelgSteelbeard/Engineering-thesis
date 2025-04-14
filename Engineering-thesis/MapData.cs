@@ -14,12 +14,14 @@ namespace Engineeringthesis
         public List<VoronoiSite> list_of_centroid { get; set; }
         public List<VoronoiSite> land_cells { get; set; }
         public List<VoronoiSite> water_cells { get; set; }
+        public MapGenerationDataSet generation_values { get; set; }
 
-        public MapData()
+        public MapData(MapGenerationDataSet generation_values)
         {
             list_of_centroid = new List<VoronoiSite>();
             land_cells = new List<VoronoiSite>();
             water_cells = new List<VoronoiSite>();
+            this.generation_values = generation_values;
         }
 
         public void ColorMap(Canvas diagram, Color landColor = default(Color), Color waterColor = default(Color))
