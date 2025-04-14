@@ -42,9 +42,15 @@ namespace Engineeringthesis
             ClassifyVoronoiCells(map.list_of_centroid, edges, map.water_cells, map.land_cells, canvas, treshold);
         }
 
-        public static bool IsLand(VoronoiSite centroid, Canvas canvas, double treshold)
+        public static bool IsLand(VoronoiSite centroid, Canvas canvas, double treshold, double offsetFactor = 0.1)
         {
             Point center = GeometryData.GetCanvasCenter(canvas);
+
+            // Apply random offset to the center for more variation  
+            Random random = new Random(canvas.GetHashCode()); // Seed based on canvas for consistency  
+            double offsetX = offsetFactor * (random.NextDouble() - 0.5) * canvas.ActualWidth;
+            double offsetY = offsetFactor * (random.NextDouble() - 0.5) * canvas.ActualHeight;
+            center.Offset(offsetX, offsetY);
 
             double dx = GeometryData.SiteToPointDifferance(centroid, center).X;
             double dy = GeometryData.SiteToPointDifferance(centroid, center).Y;
@@ -57,11 +63,37 @@ namespace Engineeringthesis
 
             double angle = Math.Atan2(dy, dx);
 
-            double perturbation = 0.1 * Math.Sin(6 * angle);
+            // Introduce Ridged noise for more natural shapes  
+            random = new Random(centroid.GetHashCode()); // Seed based on centroid for consistency  
+            double noise = GenerateRidgedNoise(angle, r, random);
 
-            double value = r + perturbation;
+            double value = r + noise;
 
             return value < treshold;
+        }
+
+        private static double GenerateRidgedNoise(double angle, double radius, Random random)
+        {
+            // Generate Perlin-like noise with ridges
+            double baseFrequency = 4.0;
+            double amplitude = 0.2;
+
+            double noiseValue = 0.0;
+            double frequency = baseFrequency;
+            double currentAmplitude = amplitude;
+
+            for (int i = 0; i < 4; i++) // Octaves for multi-frequency noise
+            {
+                double rawNoise = Math.Sin(frequency * angle + random.NextDouble() * 2 * Math.PI) *
+                                  Math.Sin(frequency * radius + random.NextDouble() * 2 * Math.PI);
+                rawNoise = Math.Abs(rawNoise); // Ridged effect
+                noiseValue += rawNoise * currentAmplitude;
+
+                frequency *= 2.0; // Increase frequency
+                currentAmplitude *= 0.5; // Decrease amplitude
+            }
+
+            return noiseValue - amplitude; // Normalize to center around 0
         }
     }
 }

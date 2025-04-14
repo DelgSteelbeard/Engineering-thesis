@@ -21,7 +21,11 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        LandTresholdBox.Text = LandTreshold.Value.ToString();
+
+        LandTreshold.Value = double.Parse(LandTresholdBox.Text);
+        Amplitude.Value = double.Parse(AmplitudeBox.Text);
+        BaseFrequency.Value = double.Parse(BaseFrequencyBox.Text);
+        Octaves.Value = double.Parse(OctavesBox.Text);
     }
     private void GeneratePoints_Click(object sender, RoutedEventArgs e)
     {
@@ -50,5 +54,28 @@ public partial class MainWindow : Window
     private void LandTreshold_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
     {
         LandTresholdBox.Text = LandTreshold.Value.ToString();
+    }
+    private void Amplitude_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        AmplitudeBox.Text = Amplitude.Value.ToString();
+    }
+    private void BaseFrequency_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        BaseFrequencyBox.Text = BaseFrequency.Value.ToString();
+    }
+    private void Octaves_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        string message = Octaves.Value.ToString();
+        try
+        {
+            if (OctavesBox != null)
+            {
+                OctavesBox.Text = Octaves.Value.ToString();
+            }
+        }
+        catch (NullReferenceException)
+        {
+            MessageBox.Show("OctavesBox is null");
+        }
     }
 }
